@@ -1,0 +1,25 @@
+accessLog: 
+  filePath: "/logs/access.log"
+  format: json
+  bufferingSize: 10
+  fields:
+    defaultMode: keep
+    RouterName: keep
+    ClientUsername: keep
+    RequestHost: keep
+    RequestPath: keep
+    RequestMethod: keep
+    StartLocal: keep
+    ClientAdd: keep
+    RequestCount: keep
+    StartUTC: drop
+
+log:
+  level: DEBUG
+
+http:
+  middlewares:
+    basic-auth:
+      basicAuth:
+        usersFile: "/conf/users.txt" 
+
