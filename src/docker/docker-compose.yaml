@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.file.filename=/conf/dynamic_conf.yml"
+      - "--providers.file.watch=true"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=duckdns"
+      # Debug
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=email@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      #- "--accesslog=true"
+      #- "--accesslog.filepath=/logs/access.log"
+    ports:
+      - "443:443"
+      - "8080:8080"
+    env_file:
+      - env-duckdns.sh
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+      - "./conf:/conf"
+      - "./logs:/logs"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.rule=Host(`xxx.duckdns.org`)&&PathPrefix(`/traefik`, `/api`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+
+      # stripprefix for dashboard
+      - "traefik.http.routers.traefik.middlewares=basic-auth@file,mystrip"
+      - "traefik.http.middlewares.mystrip.stripprefix.prefixes=/traefik"
+
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    environment:
+      - PUID=1000 #optional
+      - PGID=1000 #optional
+
+      - LOG_FILE=true #optional
+    env_file:
+      - env-duckdns.sh
+    restart: unless-stopped
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service1"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)&&Host(`xxx.duckdns.org`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.middlewares=basic-auth@file"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+    restart: unless-stopped
+
+  pgadmin:
+    image: "dpage/pgadmin4:6.19"
+    container_name: "pgadmin"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    profiles:
+      - donotstart  # Doesn't run on AWS free tier
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.rule=PathPrefix(`/pgadmin`)&&Host(`aws-dashboard.duckdns.org`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.middlewares=basic-auth@file"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+    restart: unless-stopped
