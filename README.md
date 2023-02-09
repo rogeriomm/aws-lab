@@ -98,11 +98,7 @@ ssh ec2-user@$ip "sudo yum update && sudo yum install -y openvpn"
 ```
 
 ```shell
-sudo yum update && sudo yum upgrade && sudo yum install -y telnet
-```
-
-```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y telnet openvpn"
+ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y netcat openvpn"
 ```
 
 ```shell
@@ -128,7 +124,7 @@ ssh ec2-user@$ip "mkdir -p docker/conf"
  ```
 
 ```shell
-#scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/
+scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/
 scp src/docker/conf/dynamic_conf.yml ec2-user@$ip:./docker/conf/dynamic_conf.yml
 scp src/docker/conf/users.txt ec2-user@$ip:./docker/conf/users.txt
 ```
@@ -162,6 +158,25 @@ ssh ec2-user@$ip "cd docker && docker-compose logs traefik"
 # AWS RDS
 ```shell
 aws rds describe-db-instances | yq
+```
+
+   * Get Postgres endpoint
+```shell
+address=$(aws rds describe-db-instances | yq '.DBInstances[] | select(.DBName=="labdb") | .Endpoint.Address')
+port=$(aws rds describe-db-instances | yq '.DBInstances[] | select(.DBName=="labdb") | .Endpoint.Port')
+echo $address:$port
+```
+
+   * Get EC2 ip
+```shell
+ip=$(aws ec2 describe-instances | 
+      yq 'select(.Reservations[].Instances[].State.Code == 16) | .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicIp')
+echo $ip
+```
+
+   * Check Postgres routing from EC2
+```shell
+ssh ec2-user@$ip "nc -v $address $port"
 ```
 
 # Destroy infrastructure
