@@ -93,15 +93,31 @@ ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y tel
 ```
 
 ```shell
-ssh ec2-user@$ip "sudo yum update ; sudo yum install -y docker python3-pip htop; sudo usermod -a -G docker ec2-user"
-ssh ec2-user@$ip "sudo pip3 install docker-compose"
-ssh ec2-user@$ip "sudo systemctl enable docker.service; sudo systemctl start docker.service"
-ssh ec2-user@$ip "systemctl status docker.service"
+ssh ec2-user@$ip "sudo yum update && sudo yum install -y docker python3-pip htop && sudo usermod -a -G docker ec2-user && sudo pip3 install docker-compose"
 ```
 
 ```shell
-ssh ec2-user@$ip "mkdir -p docker"
-scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/ 
+ssh ec2-user@$ip "sudo systemctl enable docker.service && sudo systemctl start docker.service && systemctl status docker.service"
+```
+
+   * Edit src/docker/env-duckdns.sh
+```text
+SUBDOMAINS=your-subdomain
+DUCKDNS_TOKEN=your-token
+TOKEN=$DUCKDNS_TOKEN
+``` 
+
+   * Edit src/docker/docker-compose.yaml, set email and Duckdns subdomain FIXME
+   * Edit src/docker/conf/users.txt FIXME
+
+```shell
+ssh ec2-user@$ip "mkdir -p docker/conf"
+ ```
+
+```shell
+#scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/
+scp src/docker/conf/dynamic_conf.yml ec2-user@$ip:./docker/conf/dynamic_conf.yml
+scp src/docker/conf/users.txt ec2-user@$ip:./docker/conf/users.txt
 ```
 
 ```shell
