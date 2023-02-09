@@ -67,13 +67,10 @@ terraform apply
 # Post install
 
 ```shell
+ssh-add src/free-tier/provision/access/free-tier-ec2-key
 ip=$(aws ec2 describe-instances | 
       yq 'select(.Reservations[].Instances[].State.Code == 16) | .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicIp')
 echo $ip
-```
-
-```shell
-ssh-add src/free-tier/provision/access/free-tier-ec2-key
 ```
 
    * Edit /etc/hosts add "aws" host name
@@ -167,8 +164,9 @@ port=$(aws rds describe-db-instances | yq '.DBInstances[] | select(.DBName=="lab
 echo $address:$port
 ```
 
-   * Get EC2 ip
+   * Get EC2 ip, add SSH private key
 ```shell
+ssh-add src/free-tier/provision/access/free-tier-ec2-key
 ip=$(aws ec2 describe-instances | 
       yq 'select(.Reservations[].Instances[].State.Code == 16) | .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicIp')
 echo $ip
