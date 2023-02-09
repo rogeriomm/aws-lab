@@ -93,7 +93,7 @@ ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y tel
 ```
 
 ```shell
-ssh ec2-user@$ip "sudo yum update ; sudo yum install docker python3-pip htop; sudo usermod -a -G docker ec2-user"
+ssh ec2-user@$ip "sudo yum update ; sudo yum install -y docker python3-pip htop; sudo usermod -a -G docker ec2-user"
 ssh ec2-user@$ip "sudo pip3 install docker-compose"
 ssh ec2-user@$ip "sudo systemctl enable docker.service; sudo systemctl start docker.service"
 ssh ec2-user@$ip "systemctl status docker.service"
