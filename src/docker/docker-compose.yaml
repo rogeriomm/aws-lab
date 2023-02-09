@@ -74,7 +74,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     profiles:
-      - donotstart  # Don't run on AWS free tier
+      - donotstart  # Doesn't run on AWS free tier
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.tls=true"
