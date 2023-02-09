@@ -89,7 +89,20 @@ ssh-keyscan -H $ip >> ~/.ssh/known_hosts
 ```
 
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y telnet"
+ssh ec2-user@$ip "sudo amazon-linux-extras install epel -y"
+```
+
+   * FIXME
+```shell
+ssh ec2-user@$ip "sudo yum update && sudo yum install -y openvpn"
+```
+
+```shell
+sudo yum update && sudo yum upgrade && sudo yum install -y telnet
+```
+
+```shell
+ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y telnet openvpn"
 ```
 
 ```shell
@@ -146,6 +159,10 @@ ssh ec2-user@$ip "cd docker && docker-compose logs duckdns"
 ssh ec2-user@$ip "cd docker && docker-compose logs traefik"
 ```
 
+# AWS RDS
+```shell
+aws rds describe-db-instances | yq
+```
 
 # Destroy infrastructure
 ```shell
