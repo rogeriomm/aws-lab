@@ -8,7 +8,7 @@ terraform {
 }
 
 locals {
-  name   = "free-tier-complete"
+  name   = "free-tier"
   region = "us-east-1"
 
   user_data = <<-EOT
@@ -36,7 +36,7 @@ module "ec2-free-tier" {
   key_name = aws_key_pair.ec2_key_pair.key_name
 
   subnet_id              = element(module.vpc.public_subnets, 0)
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.security_group_ec2.security_group_id]
 
   tags = local.tags
 }
@@ -70,19 +70,17 @@ module "db" {
   iam_database_authentication_enabled = true
 
   db_subnet_group_name   = module.vpc.database_subnet_group
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.security_group_db.security_group_id]
   create_db_subnet_group = false
-  subnet_ids = []
+  subnet_ids             = module.vpc.database_subnets
 
-
-
-  maintenance_window = "Mon:00:00-Mon:03:00"
+  maintenance_window  = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
+
   create_cloudwatch_log_group     = false
 
   # Database Deletion Protection
   deletion_protection = false
-
 }
 
 
@@ -124,12 +122,34 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-module "security_group" {
+module "security_group_db" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = local.name
-  description = "Security group for example usage with EC2 instance"
+  name        = "${local.name}_db"
+  description = "PostgreSQL security group"
+  vpc_id      = module.vpc.vpc_id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 3306
+      to_port     = 3306
+      protocol    = "tcp"
+      description = "PostgreSQL access from within VPC"
+      cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
+
+  tags = local.tags
+}
+
+module "security_group_ec2" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
+  name        = "${local.name}_ec2"
+  description = "EC2 Security group"
   vpc_id      = module.vpc.vpc_id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
