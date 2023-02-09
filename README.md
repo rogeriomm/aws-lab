@@ -76,8 +76,20 @@ echo $ip
 ssh-add src/free-tier/provision/access/free-tier-ec2-key
 ```
 
+   * Edit /etc/hosts add "aws" host name
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum upgrade"
+sudo bash -c "echo $ip aws >> /etc/hosts"
+```
+
+```shell
+ssh-keygen -R aws  
+ssh-keyscan -H aws >> ~/.ssh/known_hosts
+ssh-keygen -R $ip
+ssh-keyscan -H $ip >> ~/.ssh/known_hosts
+```
+
+```shell
+ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y telnet"
 ```
 
 ```shell
