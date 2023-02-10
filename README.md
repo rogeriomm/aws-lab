@@ -8,11 +8,19 @@ This is a [Terraform](https://www.terraform.io/) project for managing AWS resour
 
 It can build the next infrastructure:
 
-* [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
-* Public [Subnet](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet) in the `VPC`
-* [IGW](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html) to enable access to or from the Internet for `VPC`
-* [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) to associate `IGW`, `VPC` and `Subnet`
-* [EC2 Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) in the public `Subnet` with the HTTP(s) & SSH access
+   * [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
+   * Public [Subnet](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet) in the `VPC`
+   * [IGW](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html) to enable access to or from the Internet for `VPC`
+   * [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) to associate `IGW`, `VPC` and `Subnet`
+   * [EC2 Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) in the public `Subnet` with the HTTPS Lets Encrypt certificate & SSH access with free dynamic DNS provider
+   * [RDS Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/concepts.html) in the private `Subnet`
+   * [Docker](https://docs.docker.com/get-started/overview/) running on EC2: [docker-compose.yaml](./src/docker/docker-compose.yaml)
+      * [Free dynamic DNS host on AWS](https://www.duckdns.org/)
+      * [Sample web application](https://github.com/traefik/whoami)
+         * My personal URL: https://aws-dashboard.duckdns.org/whoami
+      * [Traefik](https://traefik.io/traefik/): Reverse proxy, [Lets Encrypt](https://letsencrypt.org/), [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
+         * My personal URL: https://aws-dashboard.duckdns.org/traefik
+         * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
 
 ### Pre steps
 
@@ -64,7 +72,7 @@ cd ./src/free-tier
 terraform apply
 ```
 
-# Post install
+### Post install
 
 ```shell
 ssh-add src/free-tier/provision/access/free-tier-ec2-key
@@ -78,6 +86,7 @@ echo $ip
 sudo bash -c "echo $ip aws >> /etc/hosts"
 ```
 
+   * Generate SSH private key
 ```shell
 ssh-keygen -R aws  
 ssh-keyscan -H aws >> ~/.ssh/known_hosts
@@ -85,24 +94,19 @@ ssh-keygen -R $ip
 ssh-keyscan -H $ip >> ~/.ssh/known_hosts
 ```
 
+   * Install EPEL, Postgres 14 packages
 ```shell
 ssh ec2-user@$ip "sudo amazon-linux-extras install epel postgresql14 -y"
 ```
 
-   * FIXME
+   * Upgrade Linux and install packages
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum install -y openvpn postgresql"
+ssh ec2-user@$ip "sudo yum update && sudo yum upgrade -y && sudo yum install -y netcat openvpn postgresql docker python3-pip htop"
 ```
 
+   * Install Docker compose, configuration
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum upgrade && sudo yum install -y netcat openvpn"
-```
-
-```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum install -y docker python3-pip htop && sudo usermod -a -G docker ec2-user && sudo pip3 install docker-compose"
-```
-
-```shell
+ssh ec2-user@$ip "sudo usermod -a -G docker ec2-user && sudo pip3 install docker-compose"
 ssh ec2-user@$ip "sudo systemctl enable docker.service && sudo systemctl start docker.service && systemctl status docker.service"
 ```
 
@@ -113,19 +117,19 @@ DUCKDNS_TOKEN=your-token
 TOKEN=$DUCKDNS_TOKEN
 ``` 
 
-   * Edit src/docker/docker-compose.yaml, set email and Duckdns subdomain FIXME
-   * Edit src/docker/conf/users.txt FIXME
+   * Edit src/docker/docker-compose.yaml, set email and Duckdns subdomain TODO
 
+   * Edit src/docker/conf/users.txt TODO
+
+   * Copy Docker files
 ```shell
 ssh ec2-user@$ip "mkdir -p docker/conf"
- ```
-
-```shell
 scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/
 scp src/docker/conf/dynamic_conf.yml ec2-user@$ip:./docker/conf/dynamic_conf.yml
 scp src/docker/conf/users.txt ec2-user@$ip:./docker/conf/users.txt
 ```
 
+   * Start Docker containers
 ```shell
 ssh ec2-user@$ip "cd docker && docker-compose up -d"
 ```
@@ -179,7 +183,7 @@ ssh ec2-user@$ip "nc -v $address $port"
 
    * Postgres cli
 ```shell
-ssh ec2-user@$ip psql --host labdb.ca7llygc5a1p.us-east-1.rds.amazonaws.com  --port 3306 --username postgres
+ssh ec2-user@$ip psql --host $address --port $port --username postgres
 ```
 
 # Destroy infrastructure
