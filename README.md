@@ -86,12 +86,12 @@ ssh-keyscan -H $ip >> ~/.ssh/known_hosts
 ```
 
 ```shell
-ssh ec2-user@$ip "sudo amazon-linux-extras install epel -y"
+ssh ec2-user@$ip "sudo amazon-linux-extras install epel postgresql14 -y"
 ```
 
    * FIXME
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum install -y openvpn"
+ssh ec2-user@$ip "sudo yum update && sudo yum install -y openvpn postgresql"
 ```
 
 ```shell
@@ -175,6 +175,11 @@ echo $ip
    * Check Postgres routing from EC2
 ```shell
 ssh ec2-user@$ip "nc -v $address $port"
+```
+
+   * Postgres cli
+```shell
+ssh ec2-user@$ip psql --host labdb.ca7llygc5a1p.us-east-1.rds.amazonaws.com  --port 3306 --username postgres
 ```
 
 # Destroy infrastructure
