@@ -97,15 +97,36 @@ module "s3_bucket" {
 # https://www.logicloud.tech/articles/terraform/aws-lambda
 # store package locally
 # iam:CreatePolicy
-module "lambda_function" {
+module "lambda_function_python_1" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name = "my-lambda1"
-  description   = "My awesome lambda function"
+  function_name = "lambda_function_python_1"
+  description   = "Lambda function, Python, 1"
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
 
-  source_path     = "../lambda_function.py"
+  source_path     = "lambda/samples/python/lambda_function_1.py"
+
+  timeout = 2  # The amount of time your Lambda Function has to run in seconds
+
+  tags = {
+    Module = "my-lambda1"
+  }
+}
+
+# https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go
+module "lambda_function_go" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name = "lambda_function_go_1"
+  description   = "Lambda function, Go, 1"
+  handler       = "main"
+  # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
+  runtime       = "go1.x"
+
+  source_path     = "lambda/samples/golang/blank-go/function/main"
+
+  timeout = 2  # The amount of time your Lambda Function has to run in seconds
 
   tags = {
     Module = "my-lambda1"
