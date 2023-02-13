@@ -93,11 +93,32 @@ module "s3_bucket" {
   }
 }
 
+# https://github.com/terraform-aws-modules/terraform-aws-lambda
+# https://www.logicloud.tech/articles/terraform/aws-lambda
+# store package locally
+# iam:CreatePolicy
+module "lambda_function" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name = "my-lambda1"
+  description   = "My awesome lambda function"
+  handler       = "index.lambda_handler"
+  runtime       = "python3.8"
+
+  source_path     = "../lambda_function.py"
+
+  tags = {
+    Module = "my-lambda1"
+  }
+}
+
 ################################################################################
 # Supporting Resources
 ################################################################################
 
 # https://github.com/terraform-aws-modules/terraform-aws-vpc/tree/v3.19.0/examples/simple-vpc
+
+// https://github.com/terraform-aws-modules/terraform-aws-iam
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"

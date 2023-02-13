@@ -12,15 +12,17 @@ It can build the next infrastructure:
    * Public [Subnet](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet) in the `VPC`
    * [IGW](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html) to enable access to or from the Internet for `VPC`
    * [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) to associate `IGW`, `VPC` and `Subnet`
-   * [EC2 Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) in the public `Subnet` with the HTTPS Lets Encrypt certificate & SSH access with free dynamic DNS provider
    * [RDS Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/concepts.html) in the private `Subnet`
-   * [Docker](https://docs.docker.com/get-started/overview/) running on EC2: [docker-compose.yaml](./src/docker/docker-compose.yaml)
-      * [Free dynamic DNS host on AWS](https://www.duckdns.org/)
-      * [Sample web application](https://github.com/traefik/whoami)
-         * My personal URL: https://aws-dashboard.duckdns.org/whoami
-      * [Traefik](https://traefik.io/traefik/): Reverse proxy, [Lets Encrypt](https://letsencrypt.org/), [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
-         * My personal URL: https://aws-dashboard.duckdns.org/traefik
-         * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
+   * [EC2 Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) in the public `Subnet` with the HTTPS Lets Encrypt certificate & SSH access with free dynamic DNS provider
+      * [Docker](https://docs.docker.com/get-started/overview/) running on EC2: [docker-compose.yaml](./src/docker/docker-compose.yaml)
+         * [Free dynamic DNS host on AWS](https://www.duckdns.org/)
+         * [Web application sample](https://github.com/traefik/whoami)
+            * My personal URL: https://aws-dashboard.duckdns.org/whoami
+         * [Traefik](https://traefik.io/traefik/): Reverse proxy, [Lets Encrypt](https://letsencrypt.org/), [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
+            * My personal URL: https://aws-dashboard.duckdns.org/traefik
+            * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
+   * [S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) 
+   * [Lambda](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-concepts.html)
 
 ### Pre steps
 
@@ -29,8 +31,7 @@ It can build the next infrastructure:
  ```shell
 brew install terraform awscli yq
 ```
-2. Create AWS account
-   * https://amazon.com/aws
+2. [Create AWS account](https://amazon.com/aws)
 3. If the file `~/.aws/credentials` doesn't exist, create it and add you Terraform profile to the file. For example:
 ```text
    [terraform]
