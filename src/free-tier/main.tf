@@ -8,7 +8,6 @@ terraform {
 }
 
 locals {
-  name   = "free-tier"
   region = "us-east-1"
 
   user_data = <<-EOT
@@ -30,7 +29,7 @@ resource "aws_key_pair" "ec2_key_pair" {
 module "ec2-free-tier" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = "${local.name}-network-interface"
+  name = "${var.name}-network-interface"
 
   instance_type = "t2.micro"
   key_name = aws_key_pair.ec2_key_pair.key_name
@@ -83,6 +82,16 @@ module "db" {
   deletion_protection = false
 }
 
+module "s3_bucket" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = "${var.name}-bucket-1"
+  acl    = "private"
+
+  versioning = {
+    enabled = false
+  }
+}
 
 ################################################################################
 # Supporting Resources
@@ -94,7 +103,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 3.0"
 
-  name = local.name
+  name = var.name
   cidr = "10.99.0.0/18"
 
   azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
@@ -126,7 +135,7 @@ module "security_group_db" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}_db"
+  name        = "${var.name}_db"
   description = "PostgreSQL security group"
   vpc_id      = module.vpc.vpc_id
 
@@ -148,7 +157,7 @@ module "security_group_ec2" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${local.name}_ec2"
+  name        = "${var.name}_ec2"
   description = "EC2 Security group"
   vpc_id      = module.vpc.vpc_id
 
@@ -161,7 +170,7 @@ module "security_group_ec2" {
 }
 
 resource "aws_placement_group" "web" {
-  name     = local.name
+  name     = var.name
   strategy = "cluster"
 }
 

@@ -10,6 +10,12 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "name" {
+  description = "Project name"
+  type        = string
+  default     = "free-tier"
+}
+
 variable "ec2_ssh_key_name" {
   description = "The SSH Key Name"
   type        = string
