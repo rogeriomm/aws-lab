@@ -23,6 +23,11 @@ It can build the next infrastructure:
             * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
    * [S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) 
    * [Lambda](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-concepts.html)
+      * Samples
+         * [Python](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-python)
+         * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go)
+         * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java)
+         * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html)
 
 ### Pre steps
 
