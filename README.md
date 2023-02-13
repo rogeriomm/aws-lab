@@ -24,10 +24,10 @@ It can build the next infrastructure:
    * [S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) 
    * [Lambda](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-concepts.html)
       * Samples
-         * [Python](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-python)
-         * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go)
-         * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java)
-         * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html)
+         * [Python](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-python) [Source code](./src/free-tier/lambda/samples/python)
+         * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go) [Source code](./src/free-tier/lambda/samples/golang/blank-go/function)
+         * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [TODO]()
+         * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html) [TODO]()
 
 ### Pre steps
 
