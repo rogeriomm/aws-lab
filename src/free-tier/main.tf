@@ -102,10 +102,10 @@ module "lambda_function_python_1" {
 
   function_name = "lambda_function_python_1"
   description   = "Lambda function, Python, 1"
-  handler       = "index.lambda_handler"
+  handler       = "lambda_function_1.lambda_handler"
   runtime       = "python3.8"
 
-  source_path     = "lambda/samples/python/lambda_function_1.py"
+  source_path     = "lambda/samples/python/."
 
   timeout = 2  # The amount of time your Lambda Function has to run in seconds
 

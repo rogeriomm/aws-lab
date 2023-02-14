@@ -34,7 +34,7 @@ It can build the next infrastructure:
 1. Install software
    * MACOS 
  ```shell
-brew install terraform awscli yq
+brew install terraform awscli yq pyenv
 ```
 2. [Create AWS account](https://amazon.com/aws)
 3. If the file `~/.aws/credentials` doesn't exist, create it and add you Terraform profile to the file. For example:
@@ -62,6 +62,13 @@ aws s3api create-bucket --bucket world-terraform --region us-east-1
 ``` 
    
 ### Build infrastructure
+
+   * Install Python
+```shell
+pyenv install 3.8.16
+cd ./src/free-tier
+pyenv local 3.8.16
+```
 
 ```shell
 cd ./src/free-tier
@@ -172,14 +179,6 @@ aws rds describe-db-instances | yq
 address=$(aws rds describe-db-instances | yq '.DBInstances[] | select(.DBName=="labdb") | .Endpoint.Address')
 port=$(aws rds describe-db-instances | yq '.DBInstances[] | select(.DBName=="labdb") | .Endpoint.Port')
 echo $address:$port
-```
-
-   * Get EC2 ip, add SSH private key
-```shell
-ssh-add src/free-tier/provision/access/free-tier-ec2-key
-ip=$(aws ec2 describe-instances | 
-      yq 'select(.Reservations[].Instances[].State.Code == 16) | .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicIp')
-echo $ip
 ```
 
    * Check Postgres routing from EC2
