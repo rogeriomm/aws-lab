@@ -107,6 +107,10 @@ module "lambda_function_python_1" {
 
   source_path     = "lambda/samples/python/."
 
+  vpc_subnet_ids         = module.vpc.intra_subnets
+  vpc_security_group_ids = [module.security_group_lambda.security_group_id]
+  attach_network_policy  = true
+
   timeout = 2  # The amount of time your Lambda Function has to run in seconds
 
   tags = {
@@ -125,6 +129,9 @@ module "lambda_function_go" {
   runtime       = "go1.x"
 
   source_path     = "lambda/samples/golang/blank-go/function/main"
+
+  vpc_subnet_ids = []
+  vpc_security_group_ids = []
 
   timeout = 2  # The amount of time your Lambda Function has to run in seconds
 
@@ -148,14 +155,19 @@ module "vpc" {
   name = var.name
   cidr = "10.99.0.0/18"
 
-  azs              = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnets   = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets  = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-  database_subnets = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
-  #redshift_subnets = ["10.99.10.0/24", "10.99.11.0/24", "10.99.12.0/24"]
+  azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
 
-  #enable_nat_gateway = false
-  #single_nat_gateway = true
+  public_subnets      = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets     = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
+  database_subnets    = ["10.99.7.0/24", "10.99.8.0/24", "10.99.9.0/24"]
+  intra_subnets       = ["10.99.10.0/24","10.99.11.0/24", "10.99.12.0/24"]
+  outpost_subnets     = []
+  elasticache_subnets = []
+  redshift_subnets    = []
+
+  enable_dns_support = true
+  enable_nat_gateway = false
+  single_nat_gateway = false
   create_igw         = true
 
   tags = local.tags
@@ -171,6 +183,28 @@ data "aws_ami" "amazon_linux" {
     # aws ssm get-parameters-by-path --path "/aws/service/ami-amazon-linux-latest" --region us-east-1
     values = ["amzn-ami-hvm-*-x86_64-gp2"]
   }
+}
+
+module "security_group_lambda" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
+  name        = "${var.name}_lambda"
+  description = "PostgreSQL security group"
+  vpc_id      = module.vpc.vpc_id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 3306
+      to_port     = 3306
+      protocol    = "tcp"
+      description = "Lambda access from within VPC"
+      cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
+
+  tags = local.tags
 }
 
 module "security_group_db" {
