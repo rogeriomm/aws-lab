@@ -130,8 +130,9 @@ module "lambda_function_go" {
 
   source_path     = "lambda/samples/golang/blank-go/function/main"
 
-  vpc_subnet_ids = []
-  vpc_security_group_ids = []
+  vpc_subnet_ids         = module.vpc.intra_subnets
+  vpc_security_group_ids = [module.security_group_lambda.security_group_id]
+  attach_network_policy  = true
 
   timeout = 2  # The amount of time your Lambda Function has to run in seconds
 
@@ -166,8 +167,8 @@ module "vpc" {
   redshift_subnets    = []
 
   enable_dns_support = true
-  enable_nat_gateway = false
-  single_nat_gateway = false
+  enable_nat_gateway = false # Not on free tier
+  single_nat_gateway = false # Not on free tier
   create_igw         = true
 
   tags = local.tags
