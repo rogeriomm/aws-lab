@@ -33,8 +33,8 @@ It can build the next infrastructure:
 
 1. Install software
    * MACOS 
- ```shell
-brew install terraform awscli yq pyenv
+```shell
+brew install terraform awscli yq pyenv jenv golang
 ```
 2. [Create AWS account](https://amazon.com/aws)
 3. If the file `~/.aws/credentials` doesn't exist, create it and add you Terraform profile to the file. For example:
