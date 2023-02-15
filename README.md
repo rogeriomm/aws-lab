@@ -70,7 +70,7 @@ cd ./src/free-tier
 pyenv local 3.8.16
 ```
 
-   * Build sample lambdas
+   * Build lambda samples
 ```shell
 cd ./src/free-tier/lambda/samples
 make all
