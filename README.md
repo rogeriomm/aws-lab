@@ -73,6 +73,7 @@ pyenv local 3.8.16
    * Install Java
 ```shell
 jenv add 3.8.16
+jenv enable-plugin gradle
 cd ./src/free-tier/java
 jenv local 11.0
 ```

@@ -1,0 +1,39 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetPolicyVersion",
+        "iam:TagRole",
+        "iam:DeletePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "iam:ListInstanceProfilesForRole",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListRolePolicies",
+        "iam:GetRole",
+        "iam:GetPolicy",
+        "iam:DeleteRole",
+        "iam:TagPolicy",
+        "iam:CreatePolicy",
+        "iam:ListPolicyVersions",
+        "ssm:GetParameter",
+        "rds:ListTagsForResource",
+        "rds:DeleteDBParameterGroup",
+        "rds:DeleteDBSubnetGroup",
+        "rds:DescribeDBParameterGroups",
+        "rds:DescribeDBSubnetGroups",
+        "rds:CreateDBSubnetGroup",
+        "rds:DescribeDBInstances",
+        "rds:DescribeDBParameters",
+        "rds:DeleteDBInstance",
+        "rds:AddTagsToResource",
+        "rds:CreateDBParameterGroup"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
