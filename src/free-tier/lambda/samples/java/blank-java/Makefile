@@ -1,0 +1,2 @@
+all:
+	gradle -q packageLibs

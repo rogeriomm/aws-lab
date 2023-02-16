@@ -125,7 +125,6 @@ module "lambda_function_go" {
   function_name = "lambda_function_go_1"
   description   = "Lambda function, Go, 1"
   handler       = "main"
-  # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
   runtime       = "go1.x"
 
   source_path     = "lambda/samples/golang/blank-go/function/main"
@@ -134,7 +133,29 @@ module "lambda_function_go" {
   vpc_security_group_ids = [module.security_group_lambda.security_group_id]
   attach_network_policy  = true
 
-  timeout = 2  # The amount of time your Lambda Function has to run in seconds
+  timeout = 4
+
+  tags = {
+    Module = "my-lambda1"
+  }
+}
+
+# https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java
+module "lambda_function_java" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name = "lambda_function_java_1"
+  description   = "Lambda function, Java, 1"
+  handler       = "main"
+  runtime       = "java11"
+
+  source_path     = "lambda/samples/java/blank-java/build/blank-java-lib.zip"
+
+  vpc_subnet_ids         = module.vpc.intra_subnets
+  vpc_security_group_ids = [module.security_group_lambda.security_group_id]
+  attach_network_policy  = true
+
+  timeout = 4
 
   tags = {
     Module = "my-lambda1"

@@ -26,7 +26,7 @@ It can build the next infrastructure:
       * Samples
          * [Python](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-python) [Source code](./src/free-tier/lambda/samples/python)
          * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go) [Source code](./src/free-tier/lambda/samples/golang/blank-go/function)
-         * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [TODO]()
+         * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [Source code](./src/free-tier/lambda/samples/java/blank-java/src/main/java/example/Handler.java)
          * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html) [TODO]()
 
 ### Pre steps
@@ -34,7 +34,7 @@ It can build the next infrastructure:
 1. Install software
    * MACOS 
 ```shell
-brew install terraform awscli yq pyenv jenv golang make
+brew install terraform awscli yq pyenv jenv golang make java11
 ```
 2. [Create AWS account](https://amazon.com/aws)
 3. If the file `~/.aws/credentials` doesn't exist, create it and add you Terraform profile to the file. For example:
@@ -66,8 +66,15 @@ aws s3api create-bucket --bucket world-terraform --region us-east-1
    * Install Python
 ```shell
 pyenv install 3.8.16
-cd ./src/free-tier
+cd ./src/free-tier/python
 pyenv local 3.8.16
+```
+
+   * Install Java
+```shell
+jenv add 3.8.16
+cd ./src/free-tier/java
+jenv local 11.0
 ```
 
    * Build lambda samples
