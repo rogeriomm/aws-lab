@@ -32,10 +32,39 @@ It can build the next infrastructure:
 ### Pre steps
 
 1. Install software
-   * MACOS 
+   * Install infrastructure tools
 ```shell
-brew install terraform awscli yq pyenv jenv golang make java11
+brew install terraform awscli yq
 ```
+
+   * Install general development tools
+```shell
+brew install make
+```
+
+   * Install PYTHON
+```shell
+brew install pyenv
+```
+
+   * Install GO
+```shell
+brew install golang
+```
+
+   * Install JAVA
+```shell
+brew install jenv java11
+```
+
+   * Install RUST: https://rustup.rs
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add x86_64-unknown-linux-gnu
+brew tap cargo-lambda/cargo-lambda
+brew install cargo-lambda
+```
+
 2. [Create AWS account](https://amazon.com/aws)
 3. If the file `~/.aws/credentials` doesn't exist, create it and add you Terraform profile to the file. For example:
 ```text
