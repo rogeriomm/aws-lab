@@ -34,7 +34,7 @@ It can build the next infrastructure:
 1. Install software
    * Install infrastructure tools
 ```shell
-brew install terraform awscli yq
+brew install terraform awscli yq zip
 ```
 
    * Install general development tools
@@ -101,10 +101,7 @@ pyenv local 3.8.16
 
    * Install Java
 ```shell
-jenv add 3.8.16
 jenv enable-plugin gradle
-cd ./src/free-tier/java
-jenv local 11.0
 ```
 
    * Build lambda samples

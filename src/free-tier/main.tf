@@ -160,6 +160,28 @@ module "lambda_function_java" {
   }
 }
 
+#
+module "lambda_function_rust" {
+  source = "terraform-aws-modules/lambda/aws"
+
+  function_name = "lambda_function_rust_1"
+  description   = "Lambda function, RUST, 1"
+  handler       = "example.Handler::handleRequest"
+  runtime       = "provided.al2" # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
+
+  source_path     = "lambda/samples/rust/basic-sqs/target/lambda/basic-sqs/bootstrap" # https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html
+
+  vpc_subnet_ids         = module.vpc.intra_subnets
+  vpc_security_group_ids = [module.security_group_lambda.security_group_id]
+  attach_network_policy  = true
+
+  timeout = 4
+
+  tags = {
+    Module = "my-lambda1"
+  }
+}
+
 # https://github.com/terraform-aws-modules/terraform-aws-apigateway-v2/tree/master/examples/vpc-link-http
 # https://docs.aws.amazon.com/apigateway/latest/developerguide/using-service-linked-roles.html
 module "api_gateway" {
