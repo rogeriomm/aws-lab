@@ -31,12 +31,17 @@ module "ec2-free-tier" {
 
   name = "${var.name}-network-interface"
 
+  ami = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
   key_name = aws_key_pair.ec2_key_pair.key_name
 
   subnet_id              = element(module.vpc.public_subnets, 0)
   vpc_security_group_ids = [module.security_group_ec2.security_group_id]
 
+  cpu_core_count       = 1
+  cpu_threads_per_core = 1
+
+  enable_volume_tags = false
   root_block_device = [
     {
       encrypted   = false
