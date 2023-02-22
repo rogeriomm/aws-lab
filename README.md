@@ -236,3 +236,6 @@ ssh ec2-user@$ip psql --host $address --port $port --username postgres
 cd ./src/free-tier
 terraform destroy
 ```
+
+# Links to similar projects
+   * https://github.com/pvarentsov/terraform-aws-free-tier
