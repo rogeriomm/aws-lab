@@ -96,7 +96,7 @@ module "security_group_ec2" {
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   # https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest
-  ingress_rules       = ["https-443-tcp", "ssh-tcp"]
+  ingress_rules       = ["https-443-tcp", "ssh-tcp", "openvpn-udp"]
   egress_rules        = ["all-all"]
 
   tags = local.tags
