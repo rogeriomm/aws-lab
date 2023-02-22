@@ -37,6 +37,18 @@ module "ec2-free-tier" {
   subnet_id              = element(module.vpc.public_subnets, 0)
   vpc_security_group_ids = [module.security_group_ec2.security_group_id]
 
+  root_block_device = [
+    {
+      encrypted   = false
+      volume_type = "gp2"
+      #throughput  = 100
+      volume_size = 30
+      #tags = {
+      #  Name = "my-root-block"
+      #}
+    },
+  ]
+
   tags = local.tags
 }
 
