@@ -88,7 +88,12 @@ aws s3api create-bucket --bucket world-terraform --region us-east-1
 
    # it creates "free-tier-ec2-key" private key and "free-tier-ec2-key.pub" public key
    ssh-keygen -f free-tier-ec2-key
-``` 
+```
+
+9. Adds SSH private key identities to the authentication agent
+```shell
+ssh-add src/free-tier/provision/access/free-tier-ec2-key
+```
    
 ### Build infrastructure
 
@@ -128,7 +133,6 @@ terraform apply
 ### Post install
 
 ```shell
-ssh-add src/free-tier/provision/access/free-tier-ec2-key
 ip=$(aws ec2 describe-instances | 
       yq 'select(.Reservations[].Instances[].State.Code == 16) | .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicIp')
 echo $ip
@@ -187,7 +191,7 @@ scp src/docker/conf/users.txt ec2-user@$ip:./docker/conf/users.txt
 ssh ec2-user@$ip "cd docker && docker-compose up -d"
 ```
 
-# Duckns
+# Duckdns
    * https://www.duckdns.org/
 
    * ./src/docker/env-duckdns.sh
@@ -229,6 +233,16 @@ ssh ec2-user@$ip "nc -v $address $port"
    * Postgres cli
 ```shell
 ssh ec2-user@$ip psql --host $address --port $port --username postgres
+```
+
+# AWS DynamoDB
+```shell
+aws efs describe-file-systems | yq
+```
+
+# AWS EFS
+```shell
+aws efs describe-file-systems | yq
 ```
 
 # Destroy infrastructure
