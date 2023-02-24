@@ -146,10 +146,8 @@ echo $ip
 sudo bash -c "echo aws aws >> /etc/hosts"
 ```
 
-   * Generate SSH private key
+   * Add SSH public key from EC2 server
 ```shell
-ssh-keygen -R aws  
-ssh-keyscan -H aws >> ~/.ssh/known_hosts
 ssh-keygen -R aws
 ssh-keyscan -H aws >> ~/.ssh/known_hosts
 ```

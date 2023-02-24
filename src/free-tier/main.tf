@@ -29,7 +29,7 @@ resource "aws_key_pair" "ec2_key_pair" {
 module "ec2-free-tier" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = "${var.name}-network-interface"
+  name = "${var.name}-ec2"
 
   ami = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
@@ -79,6 +79,16 @@ module "efs-module" {
   vpc_id              = module.vpc.vpc_id
   subnets             = module.vpc.private_subnets
   subnets_cidr_blocks = module.vpc.public_subnets_cidr_blocks
+}
+
+module "rds-module" {
+  source = "./modules/rds"
+
+  name                  = var.name
+  vpc_id                = module.vpc.vpc_id
+  database_subnet_group = module.vpc.database_subnet_group
+  database_subnets      = module.vpc.database_subnets
+  vpc_cidr_block        = module.vpc.vpc_cidr_block
 }
 
 ################################################################################
@@ -131,7 +141,7 @@ module "security_group_ec2" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${var.name}_ec2"
+  name        = "${var.name}-ec2"
   description = "EC2 Security group"
   vpc_id      = module.vpc.vpc_id
 

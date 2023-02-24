@@ -26,10 +26,10 @@ module "db" {
   # FIXME
   iam_database_authentication_enabled = true
 
-  db_subnet_group_name   = module.vpc.database_subnet_group
+  db_subnet_group_name   = var.database_subnet_group
   vpc_security_group_ids = [module.security_group_db.security_group_id]
   create_db_subnet_group = false
-  subnet_ids             = module.vpc.database_subnets
+  subnet_ids             = var.database_subnets
 
   maintenance_window  = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
@@ -44,9 +44,9 @@ module "security_group_db" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${var.name}_db"
+  name        = "${var.name}-db"
   description = "PostgreSQL security group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -55,9 +55,8 @@ module "security_group_db" {
       to_port     = 3306
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      cidr_blocks = var.vpc_cidr_block
     },
   ]
 
-  tags = local.tags
 }

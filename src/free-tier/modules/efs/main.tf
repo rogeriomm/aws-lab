@@ -38,6 +38,7 @@ module "efs" {
   security_group_use_name_prefix = true
   create_security_group      = true
   mount_targets              = { for k, v in zipmap(local.azs, var.subnets) : k => { subnet_id = v } }
+  security_group_name        = "${var.name}-efs"
   security_group_description = "${var.name} - EFS security group"
   security_group_vpc_id      = var.vpc_id
   security_group_rules = {
@@ -73,7 +74,6 @@ module "efs" {
       }
     }
   }
-
 
   tags = local.tags
 }

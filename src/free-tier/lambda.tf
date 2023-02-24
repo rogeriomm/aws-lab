@@ -91,7 +91,7 @@ module "security_group_lambda" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${var.name}_lambda"
+  name        = "${var.name}-lambda"
   description = "PostgreSQL security group"
   vpc_id      = module.vpc.vpc_id
 

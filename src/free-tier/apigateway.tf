@@ -21,3 +21,18 @@ module "api_gateway" {
     Name = "private-api"
   }
 }
+
+
+module "security_group_api_gateway" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
+  name        = "${var.name}-api-gateway"
+  description = "API Gateway group for example usage"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules       = ["http-80-tcp"]
+
+  egress_rules = ["all-all"]
+}

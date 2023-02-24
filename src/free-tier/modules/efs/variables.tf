@@ -1,5 +1,5 @@
 variable "name" {
-  description = "File system name"
+  description = "Prefix name"
   type        = string
   default     = null
 }
