@@ -267,6 +267,11 @@ nfs_ip=$(aws efs describe-mount-targets --file-system-id $filesystem_id | yq '.M
 echo $nfs_ip
 ```
 
+   * Check NFS routing from EC2
+```shell
+ssh ec2-user@$ip "nc -v $nfs_ip 2049"
+```
+
 # Destroy infrastructure
 ```shell
 cd ./src/free-tier
