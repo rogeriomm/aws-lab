@@ -38,8 +38,8 @@ module "ec2-free-tier" {
   subnet_id              = element(module.vpc.public_subnets, 0)
   vpc_security_group_ids = [module.security_group_ec2.security_group_id]
 
-  cpu_core_count       = 1
-  cpu_threads_per_core = 1
+  #cpu_core_count       = 1
+  #cpu_threads_per_core = 1
 
   enable_volume_tags = false
   root_block_device = [
@@ -54,16 +54,31 @@ module "ec2-free-tier" {
     },
   ]
 
+  /*
+  network_interface = [
+    {
+      device_index          = 0
+      network_interface_id  = aws_network_interface.this_public.id
+      delete_on_termination = false
+    },
+    {
+      device_index          = 1
+      network_interface_id  = aws_network_interface.this_private.id
+      delete_on_termination = false
+    }
+  ]
+  */
+
   tags = local.tags
 }
 
 module "efs-module" {
   source = "./modules/efs"
 
-  name                        = var.name
-  vpc_id                      = module.vpc.vpc_id
-  private_subnets             = module.vpc.private_subnets
-  private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  name                = var.name
+  vpc_id              = module.vpc.vpc_id
+  subnets             = module.vpc.private_subnets
+  subnets_cidr_blocks = module.vpc.public_subnets_cidr_blocks
 }
 
 ################################################################################
@@ -133,6 +148,11 @@ resource "aws_placement_group" "web" {
   strategy = "cluster"
 }
 
-resource "aws_network_interface" "this" {
+resource "aws_network_interface" "this_public" {
+  subnet_id = element(module.vpc.public_subnets, 0)
+  security_groups = [module.security_group_ec2.security_group_id]
+}
+
+resource "aws_network_interface" "this_private" {
   subnet_id = element(module.vpc.private_subnets, 0)
 }

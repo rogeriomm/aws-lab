@@ -28,6 +28,9 @@ It can build the next infrastructure:
          * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go) [Source code](./src/free-tier/lambda/samples/golang)
          * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [Source code](./src/free-tier/lambda/samples/java)
          * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html), [RUST Runtime for AWS Lambda](https://github.com/awslabs/aws-lambda-rust-runtime): [Source code](./src/free-tier/lambda/samples/rust)
+   * [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html)
+      * Mount NFS filesystem on AWS EC2
+   * [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) 
 
 ### Pre steps
 
@@ -84,10 +87,10 @@ aws s3api create-bucket --bucket world-terraform --region us-east-1
 
 8. Create SSH key pair to connect to EC2 instance:
 ```shell
-   cd ./src/free-tier/provision/access
+cd ./src/free-tier/provision/access
 
-   # it creates "free-tier-ec2-key" private key and "free-tier-ec2-key.pub" public key
-   ssh-keygen -f free-tier-ec2-key
+# it creates "free-tier-ec2-key" private key and "free-tier-ec2-key.pub" public key
+ssh-keygen -f free-tier-ec2-key
 ```
 
 9. Adds SSH private key identities to the authentication agent
@@ -237,12 +240,31 @@ ssh ec2-user@$ip psql --host $address --port $port --username postgres
 
 # AWS DynamoDB
 ```shell
-aws efs describe-file-systems | yq
+aws dynamodb list-tables| yq
 ```
 
 # AWS EFS
 ```shell
 aws efs describe-file-systems | yq
+```
+
+```shell
+aws efs describe-access-points | yq
+```
+
+```shell
+filesystem_id=$(aws efs describe-file-systems | yq '.FileSystems[] | select(.Name=="free-tier-efs") | .FileSystemId')
+echo $filesystem_id
+```
+
+```shell
+aws efs describe-mount-targets --file-system-id $filesystem_id | yq
+```
+
+   * Get [NFS](https://en.wikipedia.org/wiki/Network_File_System) IP address
+```shell
+nfs_ip=$(aws efs describe-mount-targets --file-system-id $filesystem_id | yq '.MountTargets[] | select (.AvailabilityZoneName=="us-east-1a") | .IpAddress')
+echo $nfs_ip
 ```
 
 # Destroy infrastructure

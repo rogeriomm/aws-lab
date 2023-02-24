@@ -10,13 +10,13 @@ variable "vpc_id" {
   default     = null
 }
 
-variable "private_subnets" {
+variable "subnets" {
   description = "A list of private subnets inside the VPC"
   type        = list(string)
   default     = []
 }
 
-variable "private_subnets_cidr_blocks" {
+variable "subnets_cidr_blocks" {
   description = ""
   type        = list(string)
   default     = []

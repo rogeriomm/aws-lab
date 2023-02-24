@@ -35,14 +35,16 @@ module "efs" {
   bypass_policy_lockout_safety_check = false
   policy_statements                  = []
 
-  mount_targets              = { for k, v in zipmap(local.azs, var.private_subnets) : k => { subnet_id = v } }
+  security_group_use_name_prefix = true
+  create_security_group      = true
+  mount_targets              = { for k, v in zipmap(local.azs, var.subnets) : k => { subnet_id = v } }
   security_group_description = "${var.name} - EFS security group"
   security_group_vpc_id      = var.vpc_id
   security_group_rules = {
     vpc = {
       # relying on the defaults provided for EFS/NFS (2049/TCP + ingress)
       description = "NFS ingress from VPC private subnets"
-      cidr_blocks = var.private_subnets_cidr_blocks
+      cidr_blocks = var.subnets_cidr_blocks
     }
   }
 
@@ -75,6 +77,9 @@ module "efs" {
 
   tags = local.tags
 }
+
+# https://registry.terraform.io/modules/stephenharris/efs-mount/aws/latest
+
 
 module "efs_default" {
   source = "terraform-aws-modules/efs/aws"
