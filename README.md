@@ -29,7 +29,7 @@ It can build the next infrastructure:
          * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [Source code](./src/free-tier/lambda/samples/java)
          * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html), [RUST Runtime for AWS Lambda](https://github.com/awslabs/aws-lambda-rust-runtime): [Source code](./src/free-tier/lambda/samples/rust)
    * [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html)
-      * Mount NFS filesystem on AWS EC2
+      * Mount [NFS](https://en.wikipedia.org/wiki/Network_File_System) filesystem on AWS EC2
    * [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) 
 
 ### Pre steps
@@ -143,31 +143,31 @@ echo $ip
 
    * Edit /etc/hosts add "aws" host name
 ```shell
-sudo bash -c "echo $ip aws >> /etc/hosts"
+sudo bash -c "echo aws aws >> /etc/hosts"
 ```
 
    * Generate SSH private key
 ```shell
 ssh-keygen -R aws  
 ssh-keyscan -H aws >> ~/.ssh/known_hosts
-ssh-keygen -R $ip
-ssh-keyscan -H $ip >> ~/.ssh/known_hosts
+ssh-keygen -R aws
+ssh-keyscan -H aws >> ~/.ssh/known_hosts
 ```
 
    * Install EPEL, Postgres 14 packages
 ```shell
-ssh ec2-user@$ip "sudo amazon-linux-extras install epel postgresql14 -y"
+ssh ec2-user@aws "sudo amazon-linux-extras install epel postgresql14 -y"
 ```
 
    * Upgrade Linux and install packages
 ```shell
-ssh ec2-user@$ip "sudo yum update && sudo yum upgrade -y && sudo yum install -y netcat openvpn postgresql docker python3-pip htop"
+ssh ec2-user@aws "sudo yum update && sudo yum upgrade -y && sudo yum install -y netcat openvpn postgresql docker python3-pip htop"
 ```
 
    * Install Docker compose, configuration
 ```shell
-ssh ec2-user@$ip "sudo usermod -a -G docker ec2-user && sudo pip3 install docker-compose"
-ssh ec2-user@$ip "sudo systemctl enable docker.service && sudo systemctl start docker.service && systemctl status docker.service"
+ssh ec2-user@aws "sudo usermod -a -G docker ec2-user && sudo pip3 install docker-compose"
+ssh ec2-user@aws "sudo systemctl enable docker.service && sudo systemctl start docker.service && systemctl status docker.service"
 ```
 
    * Edit src/docker/env-duckdns.sh
@@ -183,15 +183,15 @@ TOKEN=$DUCKDNS_TOKEN
 
    * Copy Docker files
 ```shell
-ssh ec2-user@$ip "mkdir -p docker/conf"
-scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@$ip:./docker/
-scp src/docker/conf/dynamic_conf.yml ec2-user@$ip:./docker/conf/dynamic_conf.yml
-scp src/docker/conf/users.txt ec2-user@$ip:./docker/conf/users.txt
+ssh ec2-user@aws "mkdir -p docker/conf"
+scp src/docker/docker-compose.yaml src/docker/env-duckdns.sh ec2-user@aws:./docker/
+scp src/docker/conf/dynamic_conf.yml ec2-user@aws:./docker/conf/dynamic_conf.yml
+scp src/docker/conf/users.txt ec2-user@aws:./docker/conf/users.txt
 ```
 
    * Start Docker containers
 ```shell
-ssh ec2-user@$ip "cd docker && docker-compose up -d"
+ssh ec2-user@aws "cd docker && docker-compose up -d"
 ```
 
 # Duckdns
@@ -207,13 +207,13 @@ TOKEN=your-token
 
    * Duckdns logs
 ```shell
-ssh ec2-user@$ip "cd docker && docker-compose logs duckdns"
+ssh ec2-user@aws "cd docker && docker-compose logs duckdns"
 ```
 
 # Traefik
    * Traefik logs
 ```shell
-ssh ec2-user@$ip "cd docker && docker-compose logs traefik"
+ssh ec2-user@aws "cd docker && docker-compose logs traefik"
 ```
 
 # AWS RDS
@@ -230,17 +230,17 @@ echo $address:$port
 
    * Check Postgres routing from EC2
 ```shell
-ssh ec2-user@$ip "nc -v $address $port"
+ssh ec2-user@aws "nc -v $address $port"
 ```
 
    * Postgres cli
 ```shell
-ssh ec2-user@$ip psql --host $address --port $port --username postgres
+ssh ec2-user@aws psql --host $address --port $port --username postgres
 ```
 
 # AWS DynamoDB
 ```shell
-aws dynamodb list-tables| yq
+aws dynamodb list-tables | yq
 ```
 
 # AWS EFS
@@ -261,7 +261,7 @@ echo $filesystem_id
 aws efs describe-mount-targets --file-system-id $filesystem_id | yq
 ```
 
-   * Get [NFS](https://en.wikipedia.org/wiki/Network_File_System) IP address
+   * Get NFS IP address
 ```shell
 nfs_ip=$(aws efs describe-mount-targets --file-system-id $filesystem_id | yq '.MountTargets[] | select (.AvailabilityZoneName=="us-east-1a") | .IpAddress')
 echo $nfs_ip
@@ -269,7 +269,7 @@ echo $nfs_ip
 
    * Check NFS routing from EC2
 ```shell
-ssh ec2-user@$ip "nc -v $nfs_ip 2049"
+ssh ec2-user@aws "nc -v $nfs_ip 2049"
 ```
 
 # Destroy infrastructure
