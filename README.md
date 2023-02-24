@@ -270,6 +270,9 @@ echo $nfs_ip
 ssh ec2-user@aws "nc -v $nfs_ip 2049"
 ```
 
+# Open VPN
+   * MAC OS client: https://tunnelblick.net/downloads.html
+
 # Destroy infrastructure
 ```shell
 cd ./src/free-tier
