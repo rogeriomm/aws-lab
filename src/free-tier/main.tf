@@ -91,6 +91,12 @@ module "rds-module" {
   vpc_cidr_block        = module.vpc.vpc_cidr_block
 }
 
+module "ecr-module" {
+  source = "./modules/ecr"
+
+  name                  = var.name
+}
+
 ################################################################################
 # Supporting Resources
 ################################################################################
