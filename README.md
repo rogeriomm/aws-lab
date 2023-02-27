@@ -197,7 +197,6 @@ ssh ec2-user@aws "cd docker && docker-compose up -d"
 
    * ./src/docker/env-duckdns.sh
 ```text
-TZ=America/Sao_Paulo
 SUBDOMAINS=sub-domain-1,sub-domain-2,sub-domain-3,sub-domain-4,sub-domain-5
 DUCKDNS_TOKEN=your-token
 TOKEN=your-token
@@ -281,3 +280,5 @@ terraform destroy
 
 # Links to similar projects
    * https://github.com/pvarentsov/terraform-aws-free-tier
+   * https://github.com/deersheep330/terraform-aws-ecs-free-tier
+   * https://github.com/HelloMinchan/aws-free-tier-infrastructure
