@@ -1,6 +1,8 @@
 module "ecr" {
   source = "terraform-aws-modules/ecr/aws"
 
+  create_repository = true
+
   repository_name = "${var.name}-ecr"
 
   repository_read_write_access_arns = []

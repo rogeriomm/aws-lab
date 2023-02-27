@@ -31,6 +31,8 @@ It can build the next infrastructure:
    * [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html)
       * Mount [NFS](https://en.wikipedia.org/wiki/Network_File_System) filesystem on AWS EC2
    * [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) 
+   * [ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html)
+   * [GLUE](https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html)
 
 ### Pre steps
 

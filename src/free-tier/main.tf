@@ -97,6 +97,12 @@ module "ecr-module" {
   name                  = var.name
 }
 
+module "glue-module" {
+  source = "./modules/glue"
+
+  name                  = var.name
+}
+
 ################################################################################
 # Supporting Resources
 ################################################################################
