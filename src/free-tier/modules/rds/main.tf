@@ -5,7 +5,7 @@ module "db" {
 
   db_name  = "labdb"
   username = "postgres"
-  port     = "3306"
+  port     = "5432"
 
   engine            = "postgres"
   engine_version    = var.engine_version
@@ -51,8 +51,8 @@ module "security_group_db" {
   # ingress
   ingress_with_cidr_blocks = [
     {
-      from_port   = 3306
-      to_port     = 3306
+      from_port   = 5432
+      to_port     = 5432
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
       cidr_blocks = var.vpc_cidr_block
