@@ -16,13 +16,13 @@ module "api_gateway" {
   create_api_domain_name = false
 
   integrations = {
-    "ANY /" = {
+    "ANY /api/python" = {
       lambda_arn             = module.lambda_function_python_1.lambda_function_arn
       payload_format_version = "2.0"
       timeout_milliseconds   = 12000
     }
 
-    "GET /alb-internal-route" = {
+    "GET /api/python/alb-internal-route" = {
       connection_type    = "VPC_LINK"
       vpc_link           = "my-vpc"
       integration_uri    = module.alb.http_tcp_listener_arns[0]
@@ -71,6 +71,8 @@ module "alb" {
   version = "~> 6.0"
 
   name = "${var.name}-alb"
+
+  create_lb = true
 
   vpc_id          = module.vpc.vpc_id
   security_groups = [module.alb_security_group.security_group_id]
