@@ -2,7 +2,7 @@
 
 > Getting started with the Terraform for managing a base free-tier AWS resources.
 
-### Project description
+## Project description
 
 This is a [Terraform](https://www.terraform.io/) project for managing AWS resources. 
 
@@ -34,17 +34,18 @@ It can build the next infrastructure:
    * [ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html)
    * [GLUE](https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html)
 
+## Install
 ### Pre steps
 
 1. Install software
    * Install infrastructure tools
 ```shell
-brew install terraform awscli yq zip
+brew install terraform awscli
 ```
 
    * Install general development tools
 ```shell
-brew install make
+brew install make yq zip curl
 ```
 
    * Install PYTHON
@@ -135,7 +136,7 @@ cd ./src/free-tier
 terraform apply
 ```
 
-### Post install
+## Post install
 
 ```shell
 ip=$(aws ec2 describe-instances | 
@@ -194,7 +195,8 @@ scp src/docker/conf/users.txt ec2-user@aws:./docker/conf/users.txt
 ssh ec2-user@aws "cd docker && docker-compose up -d"
 ```
 
-# Duckdns
+# Services
+## Duckdns
    * https://www.duckdns.org/
 
    * ./src/docker/env-duckdns.sh
@@ -209,13 +211,13 @@ TOKEN=your-token
 ssh ec2-user@aws "cd docker && docker-compose logs duckdns"
 ```
 
-# Traefik
+## Traefik
    * Traefik logs
 ```shell
 ssh ec2-user@aws "cd docker && docker-compose logs traefik"
 ```
 
-# AWS RDS
+## AWS RDS
 ```shell
 aws rds describe-db-instances | yq
 ```
@@ -237,12 +239,12 @@ ssh ec2-user@aws "nc -v $address $port"
 ssh ec2-user@aws psql --host $address --port $port --username postgres
 ```
 
-# AWS DynamoDB
+## AWS DynamoDB
 ```shell
 aws dynamodb list-tables | yq
 ```
 
-# AWS EFS
+## AWS EFS
 ```shell
 aws efs describe-file-systems | yq
 ```
@@ -271,7 +273,22 @@ echo $nfs_ip
 ssh ec2-user@aws "nc -v $nfs_ip 2049"
 ```
 
-# Open VPN
+## AWS API Gateway
+```shell
+aws apigatewayv2 get-apis | yq
+```
+
+```shell
+endpoint=$(aws apigatewayv2 get-apis | yq '.Items[] | select (.Name=="free-tier-api-gateway") | .ApiEndpoint')
+echo $endpoint
+```
+
+   * Run lambda Python
+```shell
+curl "$endpoint/api/python"
+```
+
+## Open VPN
    * MAC OS client: https://tunnelblick.net/downloads.html
 
 # Destroy infrastructure
