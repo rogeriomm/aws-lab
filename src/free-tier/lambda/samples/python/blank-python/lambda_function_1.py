@@ -9,12 +9,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 patch_all()
 
+# https://docs.aws.amazon.com/lambda/latest/dg/python-tracing.html
+
 client = boto3.client('lambda')
-client.get_account_settings()
+#client.get_account_settings()
+
 
 def lambda_handler(event, context):
     logger.info('## ENVIRONMENT VARIABLES\r' + jsonpickle.encode(dict(**os.environ)))
     logger.info('## EVENT\r' + jsonpickle.encode(event))
     logger.info('## CONTEXT\r' + jsonpickle.encode(context))
-    response = client.get_account_settings()
-    return response['AccountUsage']
+    #response = client.get_account_settings()
+    #return response['AccountUsage']
+    return "xxx"
+

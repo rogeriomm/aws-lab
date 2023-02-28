@@ -10,17 +10,23 @@ module "lambda_function_python_1" {
   handler       = "lambda_function_1.lambda_handler"
   runtime       = "python3.8"
 
-  source_path     = "lambda/samples/python/."
+  publish = true
+  tracing_mode = "Active"
+
+  source_path   = "lambda/samples/python/blank-python/."
 
   vpc_subnet_ids         = module.vpc.intra_subnets
   vpc_security_group_ids = [module.security_group_lambda.security_group_id]
   attach_network_policy  = true
 
-  timeout = 2  # The amount of time your Lambda Function has to run in seconds
-
-  tags = {
-    Module = "my-lambda1"
+  allowed_triggers = {
+    AllowExecutionFromAPIGateway = {
+      service    = "apigateway"
+      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*/*"
+    }
   }
+
+  timeout = 4
 }
 
 module "lambda_function_go" {
@@ -31,17 +37,23 @@ module "lambda_function_go" {
   handler       = "main"
   runtime       = "go1.x"
 
+  publish = true
+  tracing_mode = "Active"
+
   source_path     = "lambda/samples/golang/blank-go/function/main"
 
   vpc_subnet_ids         = module.vpc.intra_subnets
   vpc_security_group_ids = [module.security_group_lambda.security_group_id]
   attach_network_policy  = true
 
-  timeout = 4
-
-  tags = {
-    Module = "my-lambda1"
+  allowed_triggers = {
+    AllowExecutionFromAPIGateway = {
+      service    = "apigateway"
+      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*/*"
+    }
   }
+
+  timeout = 4
 }
 
 module "lambda_function_java" {
@@ -52,17 +64,23 @@ module "lambda_function_java" {
   handler       = "example.Handler::handleRequest"
   runtime       = "java11"
 
+  publish = true
+  tracing_mode = "Active"
+
   source_path     = "lambda/samples/java/blank-java/build/."
 
   vpc_subnet_ids         = module.vpc.intra_subnets
   vpc_security_group_ids = [module.security_group_lambda.security_group_id]
   attach_network_policy  = true
 
-  timeout = 4
-
-  tags = {
-    Module = "my-lambda1"
+  allowed_triggers = {
+    AllowExecutionFromAPIGateway = {
+      service    = "apigateway"
+      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*/*"
+    }
   }
+
+  timeout = 4
 }
 
 #
@@ -74,17 +92,23 @@ module "lambda_function_rust" {
   handler       = "example.Handler::handleRequest"
   runtime       = "provided.al2" # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
 
-  source_path     = "lambda/samples/rust/basic-sqs/target/lambda/basic-sqs/bootstrap" # https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html
+  publish = true
+  tracing_mode = "Active"
+
+  source_path   = "lambda/samples/rust/basic-sqs/target/lambda/basic-sqs/bootstrap" # https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html
 
   vpc_subnet_ids         = module.vpc.intra_subnets
   vpc_security_group_ids = [module.security_group_lambda.security_group_id]
   attach_network_policy  = true
 
-  timeout = 4
-
-  tags = {
-    Module = "my-lambda1"
+  allowed_triggers = {
+    AllowExecutionFromAPIGateway = {
+      service    = "apigateway"
+      source_arn = "${module.api_gateway.apigatewayv2_api_execution_arn}/*/*/*"
+    }
   }
+
+  timeout = 4
 }
 
 module "security_group_lambda" {
@@ -92,19 +116,16 @@ module "security_group_lambda" {
   version = "~> 4.0"
 
   name        = "${var.name}-lambda"
-  description = "PostgreSQL security group"
+  description = "Lambda security group"
   vpc_id      = module.vpc.vpc_id
 
-  # ingress
-  ingress_with_cidr_blocks = [
+  computed_ingress_with_source_security_group_id = [
     {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "Lambda access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
-    },
+      rule                     = "http-80-tcp"
+      source_security_group_id = module.api_gateway_security_group.security_group_id
+    }
   ]
+  number_of_computed_ingress_with_source_security_group_id = 1
 
-  tags = local.tags
+  egress_rules = ["all-all"]
 }
