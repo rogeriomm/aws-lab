@@ -4,35 +4,35 @@
 
 ## Project description
 
-This is a [Terraform](https://www.terraform.io/) project for managing AWS resources. 
+This is a [`Terraform`] project for managing AWS resources. 
 
 It can build the next infrastructure:
 
-   * [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
-   * Public [Subnet](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet) in the `VPC`
-   * [IGW](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html) to enable access to or from the Internet for `VPC`
-   * [Route Table](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html) to associate `IGW`, `VPC` and `Subnet`
-   * [RDS Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/concepts.html) in the private `Subnet`
-   * [EC2 Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) in the public `Subnet` with the HTTPS Lets Encrypt certificate & SSH access with free dynamic DNS provider
-      * [Docker](https://docs.docker.com/get-started/overview/) running on EC2: [docker-compose.yaml](./src/docker/docker-compose.yaml)
+   * [`VPC`]
+   * Public [`Subnet`] in the [`VPC`]
+   * [`IGW`] to enable access to or from the Internet for [`VPC`]
+   * [`Route Table`] to associate [`IGW`], [`VPC`] and [`Subnet`]
+   * [`RDS`] in the private [`Subnet`]
+   * [`EC2`] in the public [`Subnet`] with the HTTPS Lets Encrypt certificate & SSH access with free dynamic DNS provider
+      * [`Docker`] running on EC2: [docker-compose.yaml](./src/docker/docker-compose.yaml)
          * [Free dynamic DNS host on AWS](https://www.duckdns.org/)
          * [Web application sample](https://github.com/traefik/whoami)
             * My personal URL: https://aws-dashboard.duckdns.org/whoami
-         * [Traefik](https://traefik.io/traefik/): Reverse proxy, [Lets Encrypt](https://letsencrypt.org/), [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
+         * [`Traefik`] Reverse proxy, [`Lets Encrypt`], [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
             * My personal URL: https://aws-dashboard.duckdns.org/traefik
             * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
-   * [S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) 
-   * [Lambda](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-concepts.html)
+   * [`S3`]
+   * [`Lambda`]
       * Samples
          * [Python](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-python) [Source code](./src/free-tier/lambda/samples/python)
          * [Golang](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-go) [Source code](./src/free-tier/lambda/samples/golang)
          * [Java](https://github.com/awsdocs/aws-lambda-developer-guide/tree/main/sample-apps/blank-java) [Source code](./src/free-tier/lambda/samples/java)
          * [RUST](https://docs.aws.amazon.com/sdk-for-rust/latest/dg/lambda.html), [RUST Runtime for AWS Lambda](https://github.com/awslabs/aws-lambda-rust-runtime): [Source code](./src/free-tier/lambda/samples/rust)
-   * [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html)
-      * Mount [NFS](https://en.wikipedia.org/wiki/Network_File_System) filesystem on AWS EC2
-   * [DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html) 
-   * [ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html)
-   * [GLUE](https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html)
+   * [`EFS`]
+      * Mount [`NFS`] filesystem on AWS EC2
+   * [`DynamoDB`]
+   * [`ECR`]
+   * [`GLUE`]
 
 ## Install
 ### Pre steps
@@ -146,7 +146,7 @@ echo $ip
 
    * Edit /etc/hosts add "aws" host name
 ```shell
-sudo bash -c "echo aws aws >> /etc/hosts"
+sudo bash -c "echo $ip aws >> /etc/hosts"
 ```
 
    * Add SSH public key from EC2 server
@@ -302,3 +302,21 @@ terraform destroy
    * https://github.com/deersheep330/terraform-aws-ecs-free-tier
    * https://github.com/HelloMinchan/aws-free-tier-infrastructure
    * https://github.com/gruberdev/tf-free
+
+[`VPC`]: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+[`Subnet`]: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+[`IGW`]: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html
+[`Route Table`]: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html
+[`RDS`]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/concepts.html
+[`EC2`]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
+[`S3`]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
+[`Lambda`]: https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-concepts.html
+[`EFS`]: https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html
+[`DynamoDB`]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html
+[`ECR`]: https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html
+[`GLUE`]: https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html
+[`NFS`]: https://en.wikipedia.org/wiki/Network_File_System
+[`Docker`]: https://docs.docker.com/get-started/overview/
+[`Traefik`]: https://traefik.io/traefik/
+[`Lets Encrypt`]: https://letsencrypt.org/
+[`Terraform`]: https://www.terraform.io/
