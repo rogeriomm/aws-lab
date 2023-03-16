@@ -20,7 +20,7 @@ It can build the next infrastructure:
             * My personal URL: https://aws-dashboard.duckdns.org/whoami
          * [`Traefik`] Reverse proxy, [`Lets Encrypt`], [Traefik Lets Encrypt](https://doc.traefik.io/traefik/https/acme/)
             * My personal URL: https://aws-dashboard.duckdns.org/traefik
-            * ![alt text](docs/aws-traefik.png "Traefik reverse proxy running on EC2")
+            * <img src="docs/aws-traefik.png"  width="600">
    * [`S3`]
    * [`Lambda`]
       * Samples
@@ -33,6 +33,9 @@ It can build the next infrastructure:
    * [`DynamoDB`]
    * [`ECR`]
    * [`GLUE`]
+
+## Architecture Diagram
+<img src="docs/aws-lab-architecture.png"  width="600">
 
 ## Install
 ### Pre steps
