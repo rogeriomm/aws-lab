@@ -48,7 +48,7 @@ brew install terraform awscli
 
    * Install general development tools
 ```shell
-brew install make yq zip curl
+brew install make yq zip curl gradlle
 ```
 
    * Install PYTHON
@@ -63,7 +63,7 @@ brew install golang
 
    * Install JAVA
 ```shell
-brew install jenv java11
+brew install java11 jenv
 ```
 
    * Install RUST: https://rustup.rs
@@ -117,6 +117,13 @@ pyenv local 3.8.16
 ```shell
 jenv enable-plugin gradle
 ```
+
+   * Install RUST lambda
+```shell
+brew tap cargo-lambda/cargo-lambda
+brew install cargo-lambda
+```
+
 
    * Build lambda samples
 ```shell
@@ -323,3 +330,8 @@ terraform destroy
 [`Traefik`]: https://traefik.io/traefik/
 [`Lets Encrypt`]: https://letsencrypt.org/
 [`Terraform`]: https://www.terraform.io/
+
+
+# Links
+   * https://github.com/awslabs/aws-lambda-rust-runtime
+
