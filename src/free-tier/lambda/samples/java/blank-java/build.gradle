@@ -2,6 +2,10 @@ plugins {
     id 'java'
 }
 
+test {
+    jvmArgs '--add-opens', 'java.base/java.nio=ALL-UNNAMED'
+}
+
 repositories {
     mavenCentral()
 }
