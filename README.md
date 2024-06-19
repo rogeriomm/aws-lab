@@ -298,8 +298,8 @@ echo $endpoint
 curl "$endpoint/api/python"
 ```
 
-## Open VPN
-   * MAC OS client: https://tunnelblick.net/downloads.html
+## Zero Tier VPN (TODO)
+   * https://www.zerotier.com/
 
 # Destroy infrastructure
 ```shell
