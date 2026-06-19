@@ -333,6 +333,10 @@ infracost breakdown --path=.. --show-skipped
 
 <img src="docs/infracost.png" alt="Infracost breakdown example" width="600">
 
+ - [Jetbrains infracost plugin](https://plugins.jetbrains.com/plugin/24761-infracost)
+
+<img src="docs/intellij-infracost-plugin.png" alt="Jetbrains infracost  plugin" width="1000">
+
 # Links to similar projects
    * https://github.com/pvarentsov/terraform-aws-free-tier
    * https://github.com/deersheep330/terraform-aws-ecs-free-tier
