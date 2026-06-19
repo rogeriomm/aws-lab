@@ -1,2 +1,3 @@
 .idea/
 /src/free-tier/.terraform.lock.hcl
+.infracost/

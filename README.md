@@ -307,6 +307,32 @@ cd ./src/free-tier
 terraform destroy
 ```
 
+# FinOps
+
+> **Free Tier note:** AWS changed the Free Tier model after July 15, 2025. This project was originally created for the legacy 12-month Free Tier model, so new AWS accounts may follow the current credit-based Free/Paid plan model instead. Before applying this Terraform, review the current [AWS Free Tier](https://aws.amazon.com/free/) and [AWS Free Tier Terms](https://aws.amazon.com/free/terms/) pages, then validate the estimated cost with Infracost.
+
+Use [Infracost](https://github.com/infracost/infracost) to review the estimated AWS cost impact of the Terraform configuration before applying changes.
+
+Install Infracost:
+
+```shell
+brew install infracost
+```
+
+Authenticate Infracost:
+
+```shell
+infracost auth login
+```
+
+Generate a cost breakdown from the Terraform project:
+
+```shell
+infracost breakdown --path=.. --show-skipped
+```
+
+<img src="docs/infracost.png" alt="Infracost breakdown example" width="600">
+
 # Links to similar projects
    * https://github.com/pvarentsov/terraform-aws-free-tier
    * https://github.com/deersheep330/terraform-aws-ecs-free-tier
