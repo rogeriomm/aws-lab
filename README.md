@@ -338,6 +338,7 @@ infracost breakdown --path=.. --show-skipped
    * https://github.com/deersheep330/terraform-aws-ecs-free-tier
    * https://github.com/HelloMinchan/aws-free-tier-infrastructure
    * https://github.com/gruberdev/tf-free
+   * https://github.com/leorickli/wordpress-aws
 
 [`VPC`]: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
 [`Subnet`]: https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
