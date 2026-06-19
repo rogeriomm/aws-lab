@@ -2,8 +2,8 @@ locals {
   azs = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
-    Name       = var.name
-    Example    = var.name
+    Name    = var.name
+    Example = var.name
   }
 }
 
@@ -12,17 +12,18 @@ data "aws_availability_zones" "available" {}
 # https://aws.amazon.com/blogs/aws/new-for-amazon-efs-iam-authorization-and-access-points/
 # https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonelasticfilesystem.html
 module "efs" {
-  source = "terraform-aws-modules/efs/aws"
+  source  = "terraform-aws-modules/efs/aws"
+  version = "~> 1.8"
 
   create = true
 
-  name             = "${var.name}-efs"
-  creation_token   = "${var.name}-efs"
-  encrypted        = false
-  kms_key_arn      = null
+  name           = "${var.name}-efs"
+  creation_token = "${var.name}-efs"
+  encrypted      = false
+  kms_key_arn    = null
 
-  performance_mode = null
-  throughput_mode  = null
+  performance_mode                = null
+  throughput_mode                 = null
   provisioned_throughput_in_mibps = null
 
   #lifecycle_policy = {
@@ -36,11 +37,11 @@ module "efs" {
   policy_statements                  = []
 
   security_group_use_name_prefix = true
-  create_security_group      = true
-  mount_targets              = { for k, v in zipmap(local.azs, var.subnets) : k => { subnet_id = v } }
-  security_group_name        = "${var.name}-efs"
-  security_group_description = "${var.name} - EFS security group"
-  security_group_vpc_id      = var.vpc_id
+  create_security_group          = true
+  mount_targets                  = { for k, v in zipmap(local.azs, var.subnets) : k => { subnet_id = v } }
+  security_group_name            = "${var.name}-efs"
+  security_group_description     = "${var.name} - EFS security group"
+  security_group_vpc_id          = var.vpc_id
   security_group_rules = {
     vpc = {
       # relying on the defaults provided for EFS/NFS (2049/TCP + ingress)
@@ -82,7 +83,8 @@ module "efs" {
 
 
 module "efs_default" {
-  source = "terraform-aws-modules/efs/aws"
+  source  = "terraform-aws-modules/efs/aws"
+  version = "~> 1.8"
 
   name = "${var.name}-efs-default"
 }

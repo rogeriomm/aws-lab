@@ -1,9 +1,10 @@
 # https://github.com/terraform-aws-modules/terraform-aws-apigateway-v2/tree/master/examples/vpc-link-http
 # https://docs.aws.amazon.com/apigateway/latest/developerguide/using-service-linked-roles.html
 module "api_gateway" {
-  source = "terraform-aws-modules/apigateway-v2/aws"
+  source  = "terraform-aws-modules/apigateway-v2/aws"
+  version = "~> 4.0"
 
-  name = "${var.name}-api-gateway"
+  name          = "${var.name}-api-gateway"
   description   = "${var.name} HTTP API Gateway with VPC links"
   protocol_type = "HTTP"
 
@@ -108,4 +109,3 @@ module "alb_security_group" {
 
   egress_rules = ["all-all"]
 }
-
